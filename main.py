@@ -22,8 +22,6 @@ def self_info():
     else:
         print "Status code received is other than 200!"
 
-insta_username="accountthepublic"
-
 def get_user_id(insta_username):
   request_url = (base_url + 'users/search?q=%s&access_token=%s') % (insta_username, access_token)
   print 'GET request url : %s' % (request_url)
@@ -147,7 +145,7 @@ def delete_negative_comment(insta_username):
 
     if comment_info['meta']['code'] == 200:
         if len(comment_info['data']):
-            #Here's a naive implementation of how to delete the negative comments :)
+            #Here's a naive implementation of how to delete the negative comments
             for x in range(0, len(comment_info['data'])):
                 comment_id = comment_info['data'][x]['id']
                 comment_text = comment_info['data'][x]['text']
@@ -169,4 +167,40 @@ def delete_negative_comment(insta_username):
     else:
         print 'Status code other than 200 received!'
 
-delete_negative_comment(insta_username)
+def start_bot():
+    show_menu = True
+
+    while show_menu:
+        menu_choices = "Hey! Welcome to instaBot! \n What do you want to do? \n a.Get your own details\n b.Get details of a user by username\n c.Get your own recent post\n d.Get the recent post of a user by username\n e.Get a list of people who have liked the recent post of a user\n f.Like the recent post of a user\n g.Get a list of comments on the recent post of a user\n h.Make a comment on the recent post of a user\n i.Delete negative comments from the recent post of a user\n j.Exit"
+        choice = raw_input(menu_choices)
+        if choice == "a":
+            self_info()
+        elif choice == "b":
+            insta_username = raw_input("Enter the username of the user: ")
+            get_user_info(insta_username)
+        elif choice == "c":
+            get_own_post()
+        elif choice == "d":
+            insta_username = raw_input("Enter the username of the user: ")
+            get_user_post(insta_username)
+        elif choice == "e":
+            insta_username = raw_input("Enter the username of the user: ")
+            get_like_list(insta_username)
+        elif choice == "f":
+            insta_username = raw_input("Enter the username of the user: ")
+            like_a_post(insta_username)
+        elif choice == "g":
+            insta_username = raw_input("Enter the username of the user: ")
+            get_comment_list(insta_username)
+        elif choice == "h":
+            insta_username = raw_input("Enter the username of the user: ")
+            post_a_comment(insta_username)
+        elif choice == "i":
+            insta_username = raw_input("Enter the username of the user: ")
+            delete_negative_comment(insta_username)
+        elif choice == "j":
+            exit()
+        else:
+            print "wrong choice"
+
+start_bot()
