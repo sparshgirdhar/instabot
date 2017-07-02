@@ -2,13 +2,13 @@ import requests, urllib
 from textblob import TextBlob
 from textblob.sentiments import NaiveBayesAnalyzer
 
-access_token= "2177622775.bcc91a8.70838b84b2ac4fc09d68e2a2ef9b1981"
+access_token = "2177622775.bcc91a8.70838b84b2ac4fc09d68e2a2ef9b1981"
 
-base_url = "https://api.instagram.com/v1/"
+base_url = "https://api.instagram.com/v1/" #instagram API
 
 def self_info():
     request_url = (base_url + 'users/self/?access_token=%s') % (access_token)
-    print "GET request url : %s" % (request_url)
+    print "GET request url : %s" % (request_url) #Get information about the owner of the access token
     user_info = requests.get(request_url).json()
 
     if user_info['meta']['code'] == 200:
@@ -24,7 +24,7 @@ def self_info():
 
 def get_user_id(insta_username):
   request_url = (base_url + 'users/search?q=%s&access_token=%s') % (insta_username, access_token)
-  print 'GET request url : %s' % (request_url)
+  print 'GET request url : %s' % (request_url) #Get information of the user using the username
   user_info = requests.get(request_url).json()
 
   if user_info['meta']['code'] == 200:
@@ -42,7 +42,7 @@ def get_user_info(insta_username):
         print 'User does not exist!'
         exit()
     request_url = (base_url + 'users/%s?access_token=%s') % (user_id, access_token)
-    print 'GET request url : %s' % (request_url)
+    print 'GET request url : %s' % (request_url) #Get information about a user
     user_info = requests.get(request_url).json()
 
     if user_info['meta']['code'] == 200:
@@ -58,7 +58,7 @@ def get_user_info(insta_username):
 
 def get_own_post():
     request_url = (base_url + 'users/self/media/recent/?access_token=%s') % (access_token)
-    print "GET request url is: %s" %request_url
+    print "GET request url is: %s" %request_url #Get the most recent media of the user
     own_media = requests.get(request_url).json()
 
     if own_media['meta']['code'] == 200:
@@ -78,7 +78,7 @@ def get_user_post(insta_username):
         print 'User does not exist!'
         exit()
     request_url = (base_url + 'users/%s/media/recent/?access_token=%s') % (user_id, access_token)
-    print "GET request url is: %s" % request_url
+    print "GET request url is: %s" % request_url #Get the most recent media of a user
     user_media = requests.get(request_url).json()
 
     if user_media['meta']['code'] == 200:
@@ -98,7 +98,7 @@ def get_post_id(insta_username):
         print 'User does not exist!'
         exit()
     request_url = (base_url + 'users/%s/media/recent/?access_token=%s') % (user_id, access_token)
-    print 'GET request url : %s' % (request_url)
+    print 'GET request url : %s' % (request_url) #Url to get the id of the post
     user_media = requests.get(request_url).json()
 
     if user_media['meta']['code'] == 200:
@@ -111,6 +111,8 @@ def get_post_id(insta_username):
         print 'Status code other than 200 received!'
         exit()
 
+#Set a like on media by current user
+
 def like_a_post(insta_username):
     media_id = get_post_id(insta_username)
     request_url = (base_url + "media/%s/likes") %(media_id)
@@ -122,6 +124,8 @@ def like_a_post(insta_username):
         print 'Like was successful!'
     else:
         print 'Your like was unsuccessful. Try again!'
+
+#Set a comment on media by current user
 
 def post_a_comment(insta_username):
     media_id = get_post_id(insta_username)
@@ -136,6 +140,8 @@ def post_a_comment(insta_username):
         print "Successfully added a new comment!"
     else:
         print "Unable to add comment. Try again!"
+
+#Identifies whether the comment is negative or positive and delete it if it's negative
 
 def delete_negative_comment(insta_username):
     media_id = get_post_id(insta_username)
@@ -199,8 +205,13 @@ def start_bot():
             insta_username = raw_input("Enter the username of the user: ")
             delete_negative_comment(insta_username)
         elif choice == "j":
+            print "================================="
+            print "            InstaBot             "
+            print "   Developed by Sparsh Girdhar   "
+            print "================================="
+            print ""
             exit()
         else:
-            print "wrong choice"
+            print "Wrong Choice :/"
 
 start_bot()
