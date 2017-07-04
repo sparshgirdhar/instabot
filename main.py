@@ -125,6 +125,23 @@ def like_a_post(insta_username):
     else:
         print 'Your like was unsuccessful. Try again!'
 
+#Get the recent media liked by current user
+
+def recently_liked_media():
+    request_url = (base_url + "users/self/media/liked?access_token=%s") %access_token
+    print "GET request url : %s" %request_url
+    liked_media = requests.get(request_url).json()
+
+    if liked_media['meta']['code'] == 200:
+        if len(liked_media['data']):
+            print "This is the link of the media liked by the user : %s" %(liked_media['data'][0]['link'])
+        else:
+            print 'There is no recent post liked by the user!'
+            exit()
+    else:
+        print 'Status code other than 200 received!'
+        exit()
+
 #Set a comment on media by current user
 
 def post_a_comment(insta_username):
@@ -177,7 +194,7 @@ def start_bot():
     show_menu = True
 
     while show_menu:
-        menu_choices = "Hey! Welcome to instaBot! \n What do you want to do? \n a.Get your own details\n b.Get details of a user by username\n c.Get your own recent post\n d.Get the recent post of a user by username\n e.Get a list of people who have liked the recent post of a user\n f.Like the recent post of a user\n g.Get a list of comments on the recent post of a user\n h.Make a comment on the recent post of a user\n i.Delete negative comments from the recent post of a user\n j.Exit"
+        menu_choices = "Hey! Welcome to instaBot! \n What do you want to do? \n a.Get your own details\n b.Get details of a user by username\n c.Get your own recent post\n d.Get the recent post of a user by username\n e.Get a list of people who have liked the recent post of a user\n f.Like the recent post of a user\n g.Get the recent media liked by current user\n h.Get a list of comments on the recent post of a user\n i.Make a comment on the recent post of a user\n j.Delete negative comments from the recent post of a user\n k.Exit"
         choice = raw_input(menu_choices)
         if choice == "a":
             self_info()
@@ -196,15 +213,17 @@ def start_bot():
             insta_username = raw_input("Enter the username of the user: ")
             like_a_post(insta_username)
         elif choice == "g":
-            insta_username = raw_input("Enter the username of the user: ")
-            get_comment_list(insta_username)
+            recently_liked_media()
         elif choice == "h":
             insta_username = raw_input("Enter the username of the user: ")
-            post_a_comment(insta_username)
+            get_comment_list(insta_username)
         elif choice == "i":
             insta_username = raw_input("Enter the username of the user: ")
-            delete_negative_comment(insta_username)
+            post_a_comment(insta_username)
         elif choice == "j":
+            insta_username = raw_input("Enter the username of the user: ")
+            delete_negative_comment(insta_username)
+        elif choice == "k":
             print "================================="
             print "            InstaBot             "
             print "   Developed by Sparsh Girdhar   "
